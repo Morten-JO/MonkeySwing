@@ -22,6 +22,15 @@ public class RopeSwingScript : MonoBehaviour {
 	private KeyCode cancelRopeKey;
 	private KeyCode ascendRopeKey;
 	private KeyCode descendRopeKey;
+	private KeyCode boostKey;
+
+
+	private PlayerScore scoreScript;
+
+	private int startPower = 50;
+	private int power;
+	private int bananaPower = 15;
+	public Slider slider;
 
 	// Use this for initialization
 	void Start () {
@@ -30,6 +39,7 @@ public class RopeSwingScript : MonoBehaviour {
 		cancelRopeKey = (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString(ControlScript.defaultCancelRopeKeyString).ToUpper());
 		ascendRopeKey = (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString(ControlScript.defaultAscendRopeKeyString).ToUpper());
 		descendRopeKey = (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString(ControlScript.defaultDescendRopeKeyString).ToUpper());
+		boostKey = (KeyCode)System.Enum.Parse (typeof(KeyCode), PlayerPrefs.GetString (ControlScript.defaultBoostKeyString).ToUpper ());
 		//Key redirection end
 
 		Physics.IgnoreLayerCollision (9, 10);
@@ -39,6 +49,12 @@ public class RopeSwingScript : MonoBehaviour {
 		ropeBitLength = collider.bounds.size.y;
 		print (ropeBitLength);
 		Destroy (tempObj);
+
+		scoreScript = this.gameObject.GetComponent<PlayerScore> ();
+
+		InvokeRepeating ("regenPower", 0, 1f);
+		power = startPower;
+		updatePowerUI ();
 	}
 
 	void FixedUpdate(){
@@ -93,7 +109,7 @@ public class RopeSwingScript : MonoBehaviour {
 			RaycastHit hitData;
 			int layerMask = 1 << 9;
 			layerMask = ~layerMask;
-			ropesUsed++;
+			scoreScript.addRopeUsed ();
 			if (Physics.Raycast (camera.transform.position, camera.transform.TransformDirection (Vector3.forward), out hitData, maxDistanceWeb, layerMask)) {
 				shootDirectRope (hitData);
 			} else {
@@ -103,6 +119,12 @@ public class RopeSwingScript : MonoBehaviour {
 
 		if (Input.GetKeyUp (cancelRopeKey)) {
 			releaseRope ();
+		}
+		if (isSwinging && Input.GetKey(boostKey)) {
+			if (power > 1) {
+				this.GetComponent<Rigidbody> ().velocity = this.GetComponent<Rigidbody> ().velocity * 1.01f;
+				power--;
+			}
 		}
 	}
 
@@ -226,15 +248,40 @@ public class RopeSwingScript : MonoBehaviour {
 
 	void OnCollisionEnter(Collision collision) {
 		if (collision.gameObject.tag == "terrain") {
+			scoreScript.addResetUsed ();
 			this.transform.position = startPosition;
 			releaseRope ();
 			this.GetComponent<Rigidbody> ().velocity = Vector3.zero;
+			this.GetComponent<Rigidbody> ().angularVelocity = Vector3.zero;
+			this.GetComponent<Rigidbody> ().Sleep ();
+			power = startPower;
+			updatePowerUI ();
 		}
+
 	}
 
-	public int getRopesUsed(){
-		return ropesUsed;
+	void OnTriggerEnter(Collider collider){
+		if (collider.gameObject.tag == "banana") {
+			scoreScript.addBananaCollected ();
+			Destroy (collider.gameObject);
+			if (power + bananaPower < 100) {
+				power += bananaPower;
+			} else {
+				power = 100;
+			}
+			updatePowerUI ();
+		}	 
 	}
-		
+
+	public void regenPower(){
+		if (power < 100) {
+			power++;
+		}
+		updatePowerUI ();
+	}
+
+	public void updatePowerUI(){
+		slider.value = power;
+	}
 }
 

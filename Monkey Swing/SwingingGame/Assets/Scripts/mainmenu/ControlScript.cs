@@ -9,11 +9,13 @@ public class ControlScript : MonoBehaviour {
 	private readonly string defaultCancelRopeKey = "x";
 	private readonly string defaultAscendRopeKey = "c";
 	private readonly string defaultDescendRopeKey = "v";
+	private readonly string defaultBoostKey = "b";
 
 	public static readonly string defaultShootRopeKeyString = "shootRope";
 	public static readonly string defaultCancelRopeKeyString = "cancelRope";
 	public static readonly string defaultAscendRopeKeyString = "ascendRope";
 	public static readonly string defaultDescendRopeKeyString = "descendRope";
+	public static readonly string defaultBoostKeyString = "boost";
 
 	private readonly string nonExistString = "non-exist";
 
@@ -23,6 +25,7 @@ public class ControlScript : MonoBehaviour {
 	public InputField cancelRopeInput;
 	public InputField ascendRopeInput;
 	public InputField descendRopeInput;
+	public InputField boostKeyInput;
 
 	private InputField[] fields;
 
@@ -33,7 +36,6 @@ public class ControlScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
 		redBlock = shootRopeInput.colors;
 		Color red = new Color (1f, 0f, 0f, 1f);
 		redBlock.normalColor = red;
@@ -48,7 +50,7 @@ public class ControlScript : MonoBehaviour {
 		normalBlock.disabledColor = normal;
 		normalBlock.pressedColor = normal;
 
-		fields = new InputField[]{shootRopeInput, cancelRopeInput, ascendRopeInput, descendRopeInput };
+		fields = new InputField[]{shootRopeInput, cancelRopeInput, ascendRopeInput, descendRopeInput, boostKeyInput };
 		string m_shootRope = PlayerPrefs.GetString (defaultShootRopeKeyString, nonExistString);
 		if (m_shootRope == nonExistString) {
 			PlayerPrefs.SetString (defaultShootRopeKeyString, defaultShootRopeKey);
@@ -65,12 +67,17 @@ public class ControlScript : MonoBehaviour {
 		if (m_descendRope == nonExistString) {
 			PlayerPrefs.SetString (defaultDescendRopeKeyString, defaultDescendRopeKey);
 		}
+		string m_boost = PlayerPrefs.GetString (defaultBoostKeyString, nonExistString);
+		if (m_boost == nonExistString) {
+			PlayerPrefs.SetString (defaultBoostKeyString, defaultBoostKey);
+		}
 		PlayerPrefs.Save ();
 
 		shootRopeInput.text = PlayerPrefs.GetString (defaultShootRopeKeyString);
 		cancelRopeInput.text = PlayerPrefs.GetString (defaultCancelRopeKeyString);
 		ascendRopeInput.text = PlayerPrefs.GetString (defaultAscendRopeKeyString);
 		descendRopeInput.text = PlayerPrefs.GetString (defaultDescendRopeKeyString);
+		boostKeyInput.text = PlayerPrefs.GetString (defaultBoostKeyString);
 		InvokeRepeating ("checkFields", 0.5f, 1f);
 	}
 	
@@ -99,6 +106,11 @@ public class ControlScript : MonoBehaviour {
 			descendRopeInput.colors = normalBlock;
 		} else {
 			descendRopeInput.colors = redBlock;
+		}
+		if (validateInputField (boostKeyInput)) {
+			boostKeyInput.colors = normalBlock;
+		} else {
+			boostKeyInput.colors = redBlock;
 		}
 	}
 
@@ -133,6 +145,9 @@ public class ControlScript : MonoBehaviour {
 		}
 		if (validateInputField (descendRopeInput)) {
 			PlayerPrefs.SetString (defaultDescendRopeKeyString, descendRopeInput.text);
+		}
+		if (validateInputField (boostKeyInput)) {
+			PlayerPrefs.SetString (defaultBoostKeyString, boostKeyInput.text);
 		}
 		PlayerPrefs.Save ();
 		controller.returnMainMenu ();

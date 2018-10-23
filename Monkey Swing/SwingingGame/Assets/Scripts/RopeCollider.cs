@@ -13,7 +13,7 @@ public class RopeCollider : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider other){
-		if(other.tag != "Player" && other.GetComponent<Rigidbody>() != null){
+		if(other.tag != "Player" && other.tag != "disc" && other.GetComponent<Rigidbody>() != null){
 			if (!other.isTrigger) {
 				GameObject player = GameObject.FindWithTag ("Player");
 				player.GetComponent<RopeSwingScript> ().notifyCollision (this.gameObject);

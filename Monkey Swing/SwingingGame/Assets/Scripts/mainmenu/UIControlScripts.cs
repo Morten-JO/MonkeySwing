@@ -57,7 +57,7 @@ public class UIControlScripts : MonoBehaviour {
 	}
 
 	public void ExitGame(){
-
+		Application.Quit();
 	}
 
 	public void returnMainMenu(){

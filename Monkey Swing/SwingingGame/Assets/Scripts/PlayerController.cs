@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour {
 	private float oldMouseYPosition;
 	private float pitch = 0.0f;
 
+
 	// Use this for initialization
 	void Start () {
 		oldMousePosition = Input.GetAxis ("Mouse X");

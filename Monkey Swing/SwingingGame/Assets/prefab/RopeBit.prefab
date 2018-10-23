@@ -27,7 +27,7 @@ GameObject:
   - component: {fileID: 114148895442231126}
   m_Layer: 10
   m_Name: RopeBit
-  m_TagString: Untagged
+  m_TagString: rope
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

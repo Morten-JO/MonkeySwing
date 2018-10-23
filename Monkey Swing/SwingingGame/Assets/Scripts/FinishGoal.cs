@@ -12,7 +12,7 @@ public class FinishGoal : MonoBehaviour {
 	public GameObject videoPlayer;
 	public Camera scoreBoardCamera;
 	private float startTime;
-	public GameObject crosshair;
+	public GameObject canvas;
 
 	// Use this for initialization
 	void Start () {
@@ -27,16 +27,19 @@ public class FinishGoal : MonoBehaviour {
 
 	void OnCollisionEnter(Collision collision){
 		if (collision.gameObject.tag == "Player") {
-			crosshair.GetComponent<Image> ().enabled = false;
+			canvas.SetActive (false);
 			print ("called?");
 			scoreBoard.SetActive (true);
 			scoreBoardCamera.enabled = true;
 			collision.gameObject.GetComponentInChildren<Camera> ().enabled = false;
 			videoPlayer.GetComponent<VideoPlayer> ().enabled = false;
 			float secondsUsed = Time.time - startTime;
-			int ropesUsed = player.GetComponent<RopeSwingScript> ().getRopesUsed ();
+			int ropesUsed = player.GetComponent<PlayerScore> ().getRopesUsed ();
 			scoreBoard.GetComponent<ScoreboardScript> ().updateScoreBoard (secondsUsed, ropesUsed);
 			float distance = Vector3.Distance (playerStartLocation, player.transform.position);
+
+
+
 		}
 	}
 }
