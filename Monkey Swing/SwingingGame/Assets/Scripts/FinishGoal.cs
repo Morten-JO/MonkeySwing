@@ -13,6 +13,7 @@ public class FinishGoal : MonoBehaviour {
 	public Camera scoreBoardCamera;
 	private float startTime;
 	public GameObject canvas;
+	public int levelReached;
 
 	// Use this for initialization
 	void Start () {
@@ -37,7 +38,14 @@ public class FinishGoal : MonoBehaviour {
 			int ropesUsed = player.GetComponent<PlayerScore> ().getRopesUsed ();
 			scoreBoard.GetComponent<ScoreboardScript> ().updateScoreBoard (secondsUsed, ropesUsed);
 			float distance = Vector3.Distance (playerStartLocation, player.transform.position);
-
+			int reachedLevel = PlayerPrefs.GetInt ("reachedLevel", 1256);
+			if (reachedLevel != 1256) {
+				if (reachedLevel < levelReached) {
+					PlayerPrefs.SetInt ("reachedLevel", levelReached);
+				}
+			} else {
+				PlayerPrefs.SetInt ("reachedLevel", levelReached);
+			}
 
 
 		}

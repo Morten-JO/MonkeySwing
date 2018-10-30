@@ -27,9 +27,11 @@ public class RopeSwingScript : MonoBehaviour {
 
 	private PlayerScore scoreScript;
 
-	private int startPower = 50;
+	public int maxPower = 1000;
+	public int startPower = 500;
+	public int powerRegen = 10;
 	private int power;
-	private int bananaPower = 15;
+	private int bananaPower = 100;
 	public Slider slider;
 
 	// Use this for initialization
@@ -121,9 +123,9 @@ public class RopeSwingScript : MonoBehaviour {
 			releaseRope ();
 		}
 		if (isSwinging && Input.GetKey(boostKey)) {
-			if (power > 1) {
-				this.GetComponent<Rigidbody> ().velocity = this.GetComponent<Rigidbody> ().velocity * 1.01f;
-				power--;
+			if (power > 10) {
+				this.GetComponent<Rigidbody> ().velocity = this.GetComponent<Rigidbody> ().velocity * 1.02f;
+				power -= 10;
 			}
 		}
 	}
@@ -264,18 +266,21 @@ public class RopeSwingScript : MonoBehaviour {
 		if (collider.gameObject.tag == "banana") {
 			scoreScript.addBananaCollected ();
 			Destroy (collider.gameObject);
-			if (power + bananaPower < 100) {
+			if (power + bananaPower < maxPower) {
 				power += bananaPower;
 			} else {
-				power = 100;
+				power = maxPower;
 			}
 			updatePowerUI ();
 		}	 
 	}
 
 	public void regenPower(){
-		if (power < 100) {
-			power++;
+		if (power < maxPower) {
+			power += powerRegen;
+			if (power > maxPower) {
+				power = maxPower;
+			}
 		}
 		updatePowerUI ();
 	}
