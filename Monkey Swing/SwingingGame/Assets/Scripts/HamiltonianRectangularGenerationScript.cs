@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,6 +7,41 @@ using UnityEngine;
 public class HamiltonianRectangularGenerationScript: MonoBehaviour {
 
 	public Terrain terrain;
+	
+	public bool[,] generateTerrain(bool[,] currentState, int offsetX, int offsetY, bool initializingCall) {
+		int xEdgeLeft = 0;
+		int xEdgeRight = currentState.getLength(0);
+		int yEdgeBottom = currentState.getLength(1);
+		int yEdgeTop = 0;
+		
+		//Nice code 
+		bool[,] newState = currentState;
+		int newOffSetX = offsetX;
+		int newOffSetY = offsetY;
+		newState[newOffSetX, newOffSetY] = true;
+		
+		
+		if((offsetX == xEdgeLeft || offsetX == 0 || offsetY == yEdgeBottom || offsetY == 0) && !initializingCall) {
+			for(int i = 0; i<xEdgeRight; i++){
+				for(int j = 0; j < yEdgeBottom; j++){
+					Console.Write(newState[i,j]);
+				}
+			}
+			return currentState;
+		}
+			newOffSetX += 1;	
+		else {
+			
+			
+			return generateTerrain(newState, newOffSetX, newOffSetY, false);
+		}
+		
+		
+		
+		
+		
+		
+	}
 
 	public void pathGenerationV2(){
 		int depth = 20;

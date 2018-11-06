@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -37,11 +38,19 @@ public class RopeSwingScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		//Key redirection start
-		shootRopeKey = (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString(ControlScript.defaultShootRopeKeyString).ToUpper());
-		cancelRopeKey = (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString(ControlScript.defaultCancelRopeKeyString).ToUpper());
-		ascendRopeKey = (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString(ControlScript.defaultAscendRopeKeyString).ToUpper());
-		descendRopeKey = (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString(ControlScript.defaultDescendRopeKeyString).ToUpper());
-		boostKey = (KeyCode)System.Enum.Parse (typeof(KeyCode), PlayerPrefs.GetString (ControlScript.defaultBoostKeyString).ToUpper ());
+		try {
+			shootRopeKey = (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString(ControlScript.defaultShootRopeKeyString).ToUpper());
+			cancelRopeKey = (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString(ControlScript.defaultCancelRopeKeyString).ToUpper());
+			ascendRopeKey = (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString(ControlScript.defaultAscendRopeKeyString).ToUpper());
+			descendRopeKey = (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString(ControlScript.defaultDescendRopeKeyString).ToUpper());
+			boostKey = (KeyCode)System.Enum.Parse (typeof(KeyCode), PlayerPrefs.GetString (ControlScript.defaultBoostKeyString).ToUpper ());
+		} catch(Exception e){
+			shootRopeKey = (KeyCode) System.Enum.Parse(typeof(KeyCode), ControlScript.defaultShootRopeKey.ToUpper());
+			cancelRopeKey = (KeyCode) System.Enum.Parse(typeof(KeyCode), ControlScript.defaultCancelRopeKey.ToUpper());
+			ascendRopeKey = (KeyCode) System.Enum.Parse(typeof(KeyCode), ControlScript.defaultAscendRopeKey.ToUpper());
+			descendRopeKey = (KeyCode) System.Enum.Parse(typeof(KeyCode), ControlScript.defaultDescendRopeKey.ToUpper());
+			boostKey = (KeyCode) System.Enum.Parse(typeof(KeyCode), ControlScript.defaultBoostKey.ToUpper());
+		}
 		//Key redirection end
 
 		Physics.IgnoreLayerCollision (9, 10);
@@ -59,7 +68,7 @@ public class RopeSwingScript : MonoBehaviour {
 		updatePowerUI ();
 	}
 
-	void FixedUpdate(){
+	void FixedUpdate(){	
 		RaycastHit hitData;
 		int layerMask = 1 << 9;
 		layerMask = ~layerMask;
@@ -250,7 +259,7 @@ public class RopeSwingScript : MonoBehaviour {
 
 	void OnCollisionEnter(Collision collision) {
 		if (collision.gameObject.tag == "terrain") {
-			scoreScript.addResetUsed ();
+			scoreScript.addResetUsed();
 			this.transform.position = startPosition;
 			releaseRope ();
 			this.GetComponent<Rigidbody> ().velocity = Vector3.zero;

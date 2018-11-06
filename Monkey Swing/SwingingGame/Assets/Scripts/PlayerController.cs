@@ -59,7 +59,7 @@ public class PlayerController : MonoBehaviour {
 		}*/
 
 		float newYMousePosition = Input.GetAxis ("Mouse Y");
-		camera.gameObject.transform.Rotate (Vector3.right * newYMousePosition);
+		camera.gameObject.transform.Rotate (-Vector3.right * newYMousePosition);
 		if (camera.transform.localEulerAngles.x > cameraRange && camera.transform.localEulerAngles.x < 200f) {
 			camera.transform.localEulerAngles = new Vector3 (cameraRange, 0, 0);
 		} else if (camera.transform.localEulerAngles.x < 360f - cameraRange  && camera.transform.localEulerAngles.x > 200f) {

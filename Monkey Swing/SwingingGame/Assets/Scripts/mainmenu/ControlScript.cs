@@ -5,11 +5,11 @@ using UnityEngine.UI;
 
 public class ControlScript : MonoBehaviour {
 
-	private readonly string defaultShootRopeKey = "z";
-	private readonly string defaultCancelRopeKey = "x";
-	private readonly string defaultAscendRopeKey = "c";
-	private readonly string defaultDescendRopeKey = "v";
-	private readonly string defaultBoostKey = "b";
+	public static readonly string defaultShootRopeKey = "z";
+	public static readonly string defaultCancelRopeKey = "x";
+	public static readonly string defaultAscendRopeKey = "c";
+	public static readonly string defaultDescendRopeKey = "v";
+	public static readonly string defaultBoostKey = "b";
 
 	public static readonly string defaultShootRopeKeyString = "shootRope";
 	public static readonly string defaultCancelRopeKeyString = "cancelRope";
