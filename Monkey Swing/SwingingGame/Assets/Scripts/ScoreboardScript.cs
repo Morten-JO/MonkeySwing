@@ -8,6 +8,7 @@ public class ScoreboardScript : MonoBehaviour {
 	private string ropesUsedText = "Ropes used: ";
 	public Text timeSpentObject;
 	public Text ropesUsedObject;
+	private bool finished = false;
 	// Use this for initialization
 	void Start () {
 
@@ -15,7 +16,11 @@ public class ScoreboardScript : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-
+		if (finished) {
+			if (Input.anyKeyDown) {
+				mainMenu ();
+			}
+		}
 	}
 
 	public void updateScoreBoard(float seconds, int ropes){
@@ -24,6 +29,7 @@ public class ScoreboardScript : MonoBehaviour {
 		string toScoreboardRopesUsed = ropesUsedText + ropes + "!";
 		StartCoroutine(updateTextOverTime(toScoreboardTimeSpent, timeSpentObject));
 		StartCoroutine(updateTextOverTime(toScoreboardRopesUsed, ropesUsedObject));
+		finished = true;
 	}
 
 	private IEnumerator updateTextOverTime(string text, Text textObject){
@@ -33,5 +39,9 @@ public class ScoreboardScript : MonoBehaviour {
 			textObject.text = putOnBoard;
 			yield return new WaitForSeconds (0.1f);
 		}
+	}
+
+	public void mainMenu(){
+		UnityEngine.SceneManagement.SceneManager.LoadScene ("MainMenu");
 	}
 }

@@ -7,246 +7,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Threading;
 
-class PathGenerator
-{
-
-	public System.Random generator { get; set; }
-
-	public PathGenerator()
-        {
-
-        }
-        public bool[,] GenerateTerrain(bool[,] currentState, int offsetX, int offsetY, bool initializingCall, int currentLength, int illegalDirectionY, int illegalDirectionX)
-        {
-           
-            int xEdgeTop = 0;
-   
-            int xEdgeBottom = currentState.GetLength(0);
-            int yEdgeLeft = 0;
-            int yEdgeRight = currentState.GetLength(1);
-
-            //Nice code 
-            bool[,] newState = currentState;
-            int newOffSetX = offsetX;
-            int newOffSetY = offsetY;
-
-
-
-            newState[newOffSetX, newOffSetY] = true;
-
-            if ((offsetX == xEdgeBottom - 1 || offsetX == xEdgeTop || offsetY == yEdgeLeft || offsetY == yEdgeRight - 1) && !initializingCall)
-            {
-                return currentState;
-            }
-
-            else
-            {
-                int right = newOffSetY + 1;
-                int down = newOffSetX + 1;
-                int up = newOffSetX - 1;
-                int left = newOffSetY - 1;
-
-                bool legitDirection = false;
-                int desiredLength = 15;
-                int[] directionOptions = new int[] { 0, 1, 2, 3 };
-                int count = 0;
-
-
-
-                while (!legitDirection)
-                {
-
-                    int direction = this.generator.Next(0, directionOptions.Length);
-
-
-                    switch (direction)
-                    {
-
-                        case 0:
-                            directionOptions = directionOptions.Where((val, idx) => idx != 0).ToArray();
-                            if(illegalDirectionY == right)
-                            {
-                                break;
-                            }
-                            if (currentState[offsetX, right] == true)
-                            {
-                                break;
-                            }
-                            if (right == yEdgeRight - 1 && currentLength + 1 < desiredLength)
-                            {
-                                break;
-                            }
-                            try
-                            {
-                                if (currentState[offsetX - 1, newOffSetY + 1] || currentState[offsetX + 1, newOffSetY + 1] || currentState[offsetX, newOffSetY + 2])
-                                {
-                                    break;
-                                }
-                            }
-                            catch(IndexOutOfRangeException e)
-                            {
-                                if (currentState[offsetX - 1, newOffSetY + 1] || currentState[offsetX + 1, newOffSetY + 1])
-                                {
-                                    break;
-                                }
-                            }
-
-                            newOffSetY = right;
-                            legitDirection = true;
-                            break;
-
-                        case 1:
-                            directionOptions = directionOptions.Where((val, idx) => idx != 1).ToArray();
-                            if (illegalDirectionX == down)
-                            {
-                                break;
-                            }
-                            if (currentState[down, offsetY] == true)
-                            {
-                                break;
-                            }
-                            if (down >= xEdgeBottom - 1 && currentLength + 1 < desiredLength)
-                            {
-                                break;
-                            }
-                          
-
-                            try
-                            {
-                                if (currentState[offsetX + 1, newOffSetY + 1] || currentState[offsetX + 1, newOffSetY - 1] || currentState[offsetX + 2, newOffSetY])
-                                {
-                                    break;
-                                }
-
-
-                            }
-                            catch (IndexOutOfRangeException e)
-                            {
-                                if (currentState[offsetX + 1, newOffSetY + 1] || currentState[offsetX + 1, newOffSetY - 1])
-                                {
-                                    break;
-                                }
-
-                            }
-
-                            newOffSetX = down;
-                            legitDirection = true;
-                            break;
-
-                        case 2:
-
-                            directionOptions = directionOptions.Where((val, idx) => idx != 2).ToArray();
-                            if (illegalDirectionY == left)
-                            {
-                                break;
-                            }
-                            if (currentState[offsetX, left] == true)
-                            {
-                                break;
-                            }
-                            if (left == yEdgeLeft && currentLength + 1 < desiredLength)
-                            {
-                                break;
-                            }
-                          
-
-                            try
-                            {
-                                if (currentState[offsetX - 1, newOffSetY - 1] || currentState[offsetX + 1, newOffSetY - 1] || currentState[offsetX, newOffSetY - 2])
-                                {
-                                    break;
-                                }
-
-                            }
-                            catch (IndexOutOfRangeException e)
-                            {
-                                if (currentState[offsetX - 1, newOffSetY - 1] || currentState[offsetX + 1, newOffSetY - 1])
-                                {
-                                    break;
-                                }
-
-                            }
-
-                         
-                            newOffSetY = left;
-                            legitDirection = true;
-                            break;
-
-                        case 3:
-
-                            directionOptions = directionOptions.Where((val, idx) => idx != 3).ToArray();
-                            if (illegalDirectionX == up)
-                            {
-                                break;
-                            }
-                            if (currentState[up, newOffSetY] == true)
-                            {
-                                break;
-                            }
-                            if (up == xEdgeTop && currentLength + 1 < desiredLength)
-                            {
-                                break;
-                            }                     
-                            try
-                            {
-                                if (currentState[offsetX - 1, newOffSetY - 1] || currentState[offsetX - 1, newOffSetY + 1] || currentState[offsetX - 2, newOffSetY])
-                                {
-                                    break;
-                                }
-
-                            } 
-                            catch (IndexOutOfRangeException e)
-                            {
-                                if (currentState[offsetX - 1, newOffSetY - 1] || currentState[offsetX - 1, newOffSetY + 1])
-                                {
-                                    break;
-                                }
-
-                            }
-
-                            newOffSetX = up;
-                            legitDirection = true;
-                            break;
-
-                        default:
-                            break;
-
-                    }
-                    count++;
-
-                    if (count > 4)
-                    {
-
-                        //Need a "DONT GO THIS WAY" param
-                        newState[offsetX, offsetY] = false;
-                        if (currentState[newOffSetX - 1, newOffSetY] == true)
-                        {
-                            return GenerateTerrain(newState, newOffSetX - 1, newOffSetY, false, currentLength - 1, offsetX, 0);
-                        }
-                        else if (currentState[newOffSetX, right] == true)
-                        {
-                            return GenerateTerrain(newState, newOffSetX, newOffSetY + 1, false, currentLength - 1, 0, offsetY);
-
-                        }
-                        else if (currentState[newOffSetX, left] == true)
-                        {
-                            return GenerateTerrain(newState, newOffSetX, newOffSetY - 1, false, currentLength - 1, 0, offsetY);
-
-                        }
-                        else if (currentState[down, newOffSetY] == true)
-                        {
-                            return GenerateTerrain(newState, down, newOffSetY, false, currentLength - 1, offsetX, 0);
-                        }
-						
-                    }
-                }
-
-                return GenerateTerrain(newState, newOffSetX, newOffSetY, false, currentLength + 1, 0, 0 );
-            }
-
-        }
-}
-
 public class GenerationScript: MonoBehaviour {
 
 	public GameObject canvas;
@@ -254,6 +14,18 @@ public class GenerationScript: MonoBehaviour {
 	public Terrain terrain;
 	public Text procentText;
 	public Camera camera;
+	public GameObject swingingLog;
+	public GameObject player;
+	public GameObject startCube;
+	public GameObject finishGoal;
+	public GameObject playerCanvas;
+
+	//scoreboard
+	public GameObject videoPlayer;
+	public GameObject winScreenCanvas;
+	public Camera scoreBoardCamera;
+
+
 	private bool pathGenerated = false;
 	private bool firstCall = false;
 	IEnumerator pathGeneration(){
@@ -262,12 +34,12 @@ public class GenerationScript: MonoBehaviour {
 		int width = 256;
 		int height = 256;
 
-		bool[,] grid = new bool[10, 10];
+		bool[,] grid = new bool[8, 8];
 		PathGenerator instance = new PathGenerator();
 		instance.generator = new System.Random();
 
 
-		int startingPoint = instance.generator.Next(1, 9);
+		int startingPoint = instance.generator.Next(1, 7);
 		grid[0, startingPoint] = true;
 		bool[,] path = instance.GenerateTerrain(grid, 1, startingPoint, true, 1, 0, 0);
 
@@ -276,7 +48,7 @@ public class GenerationScript: MonoBehaviour {
 		int scale = reformedArray.GetLength (0) / grid.GetLength (0);
 		for (int i = 0; i < path.GetLength (0); i++) {
 			for (int j = 0; j < path.GetLength (1); j++) {
-				if (path [i, j] == true) {
+				if (path [i, j]) {
 					for (int x = 0; x < scale; x++) {
 						for (int z = 0; z < scale; z++) {
 							reformedArray [i * scale + x, j * scale + z] = true;
@@ -285,6 +57,7 @@ public class GenerationScript: MonoBehaviour {
 				}
 			}
 		}
+
 
 		float scaleFloater = 30f;
 		TerrainData td = terrain.terrainData;
@@ -333,9 +106,118 @@ public class GenerationScript: MonoBehaviour {
 			terrain.terrainData = td;
 			yield return null;
 		}
+		generateSwingingLogs (terrain, path, startingPoint);
+		generateMapObjects (path, startingPoint);
 		pathGenerated = true;
 
 	}
+
+	private void generateMapObjects(bool[,] map, int startPoint){
+		float endPointX = 0f;
+		float endPointY = 0f;
+		float scale = 256 / map.GetLength (0);
+		for (int i = 0; i < map.GetLength (0); i++) {
+			for (int j = 0; j < map.GetLength (1); j++) {
+				if (map [i, j]) {
+					if (j == map.GetLength (0) - 1 ||
+						i == map.GetLength (0) - 1 ||
+						j == 0 && i != startPoint) {
+						endPointX = i;
+						endPointY = j;
+						UnityEngine.Debug.Log ("Found end: (" + endPointX + "," + endPointY + ")");
+					}
+				}
+			}
+		}
+		GameObject genStartCube = Instantiate (startCube) as GameObject;
+		float startCubeScaledSize = genStartCube.GetComponent<Renderer> ().bounds.size.x *3f;
+		genStartCube.transform.position = new Vector3 (startPoint* scale  + startCubeScaledSize, 10f, 0f + startCubeScaledSize);
+
+		GameObject generatedPlayer = Instantiate (player) as GameObject;
+		generatedPlayer.transform.position = new Vector3 (genStartCube.transform.position.x, genStartCube.transform.position.y + 2f, genStartCube.transform.position.z);
+
+		GameObject canvasObject = Instantiate (playerCanvas) as GameObject;
+		generatedPlayer.GetComponent<RopeSwingScript> ().slider = canvasObject.GetComponentInChildren<Slider> ();
+		PlayerScore score = generatedPlayer.GetComponent<PlayerScore> ();
+		score.ropeText = canvasObject.transform.GetChild (1).GetComponent<Text>();
+		score.resetText = canvasObject.transform.GetChild (2).GetComponent<Text>();
+		score.bananaText = canvasObject.transform.GetChild (3).GetComponent<Text>();
+		generatedPlayer.GetComponent<RopeSwingScript> ().image = canvasObject.transform.GetChild (0).gameObject;
+
+
+		GameObject finishCube = Instantiate (finishGoal) as GameObject;
+		float size = finishCube.GetComponent<Renderer> ().bounds.size.x;
+		finishCube.transform.position = new Vector3 (endPointY * scale + size / 1.72f, 2f, endPointX * scale + size / 1.72f);
+		finishCube.GetComponent<FinishGoal> ().player = generatedPlayer;
+		finishCube.GetComponent<FinishGoal> ().videoPlayer = videoPlayer;
+		finishCube.GetComponent<FinishGoal> ().scoreBoardCamera = scoreBoardCamera;
+		finishCube.GetComponent<FinishGoal> ().scoreBoard = winScreenCanvas;
+		finishCube.GetComponent<FinishGoal> ().canvas = canvasObject;
+		finishCube.GetComponent<FinishGoal> ().isGeneration = true;
+
+	}
+
+	private void generateSwingingLogs(Terrain terrain, bool [,] map, int startPoint){
+		GameObject sizer = Instantiate (swingingLog) as GameObject;
+		float size = sizer.GetComponent<Renderer> ().bounds.size.x;
+		Destroy (sizer);
+		float terrainWidth = 256;
+		float terrainHeight = 256;
+		float scale = terrainWidth / map.GetLength (0);
+		int lastTrueI = -5;
+		int lastTrueJ = -5;
+		for (int i = 0; i < map.GetLength (0); i++) {
+			for (int j = 0; j < map.GetLength (1); j++) {
+				if (startPoint == j && i == 0) { 
+
+				} else {
+					if (map [i, j]) {
+						GameObject log = Instantiate (swingingLog) as GameObject;
+						log.transform.position = new Vector3 (j * scale + size * 0.45f, 30f, i * scale + size * 0.45f);
+						int randomVal = UnityEngine.Random.Range (0, 180);
+						log.transform.Rotate (0f, randomVal, 0f); 
+						/*if (i == lastTrueI) {
+							int tCorners = 0;
+							int sideCorners = 0;
+							int tDir = 0;
+							if (i + 1 < map.GetLength (0)) {
+								if (map [i + 1, j]) {
+									sideCorners++;
+
+								}
+							} 
+							if (i - 1 >= 0) {
+								if (map [i - 1, j]) {
+									sideCorners++;
+								}
+							}
+							if (j + 1 < map.GetLength (0)) {
+								if (map [i, j + 1]) {
+									tCorners++;
+									tDir = 1;
+								}
+							} 
+							if (j - 1 >= 0) {
+								if (map [i, j - 1]) {
+									tCorners++;
+									tDir = -1;
+								}
+							}
+							if (tCorners > 0 && sideCorners > 0) {
+								log.transform.Rotate (new Vector3 (0f, 45f * tDir, 0f));
+							} else {
+								log.transform.Rotate (new Vector3 (0f, 90f, 0f));
+							}*/
+
+
+						lastTrueI = i;
+						lastTrueJ = j;
+					}
+				}
+			}
+		}
+	}
+
 
 
 	public void paintGeneration(){

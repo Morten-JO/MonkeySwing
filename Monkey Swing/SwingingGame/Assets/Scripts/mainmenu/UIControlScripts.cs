@@ -92,4 +92,8 @@ public class UIControlScripts : MonoBehaviour {
 			SceneManager.LoadScene ("LevelTwoScene");
 		}
 	}
+
+	public void GoRandomMap(){
+		SceneManager.LoadScene ("GenerationScene");
+	}
 }

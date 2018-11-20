@@ -13,6 +13,7 @@ public class FinishGoal : MonoBehaviour {
 	public Camera scoreBoardCamera;
 	private float startTime;
 	public GameObject canvas;
+	public bool isGeneration = false;
 	public int levelReached;
 
 	// Use this for initialization
@@ -32,22 +33,23 @@ public class FinishGoal : MonoBehaviour {
 			print ("called?");
 			scoreBoard.SetActive (true);
 			scoreBoardCamera.enabled = true;
+			scoreBoardCamera.gameObject.SetActive (true);
 			collision.gameObject.GetComponentInChildren<Camera> ().enabled = false;
 			videoPlayer.GetComponent<VideoPlayer> ().enabled = false;
 			float secondsUsed = Time.time - startTime;
 			int ropesUsed = player.GetComponent<PlayerScore> ().getRopesUsed ();
 			scoreBoard.GetComponent<ScoreboardScript> ().updateScoreBoard (secondsUsed, ropesUsed);
 			float distance = Vector3.Distance (playerStartLocation, player.transform.position);
-			int reachedLevel = PlayerPrefs.GetInt ("reachedLevel", 1256);
-			if (reachedLevel != 1256) {
-				if (reachedLevel < levelReached) {
+			if (!isGeneration) {
+				int reachedLevel = PlayerPrefs.GetInt ("reachedLevel", 1256);
+				if (reachedLevel != 1256) {
+					if (reachedLevel < levelReached) {
+						PlayerPrefs.SetInt ("reachedLevel", levelReached);
+					}
+				} else {
 					PlayerPrefs.SetInt ("reachedLevel", levelReached);
 				}
-			} else {
-				PlayerPrefs.SetInt ("reachedLevel", levelReached);
 			}
-
-
 		}
 	}
 }
