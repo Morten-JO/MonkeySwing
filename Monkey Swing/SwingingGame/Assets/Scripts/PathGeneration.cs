@@ -51,7 +51,7 @@ class PathGenerator
 				int left = newOffSetY - 1;
 
 				bool legitDirection = false;
-				int desiredLength = 12;
+				int desiredLength = 13;
 				int[] directionOptions = new int[] { 0, 1, 2, 3 };
 				int count = 0;
 
@@ -289,59 +289,80 @@ class PathGenerator
 	}
 
 	public bool[,] fillCircular(bool[,] map, int r){
+		
 		int length = map.GetLength (0);
-		for (int q = 0; q < length; q++) {
-			for (int w = 0; w < length; w++) {
-				int x = r;
-				int y = 0;
-				int radiusError = 1 - x;
-				while (x >= y){
-					int startX = -x + q;
-					int endX = x + q;
-
-					for(int i=startX;i<endX+1;i++){
-						if(y+w < length && i < length && y+w >= 0 && i >= 0){
-							map[y+w,i]=true;
+		bool[,] newMap = new bool[length,length];
+		for (int i = 0; i < length; i++) {
+			for (int j = 0; j < length; j++){
+				if (map [i, j]) {
+					int newRadius = UnityEngine.Random.Range (r - 2, r + 2);
+					int x = newRadius;
+					int y = -newRadius+1;
+					for (int k = y; k < x; k++) {
+						if (i + k < length && i + k >= 0 && j + k < length && j+k >= 0) {
+							newMap [i + k, j + k] = true;
 						}
 					}
-					if (y != 0)
-						for(int i=startX;i<endX+1;i++){
-							if(-y+w < length && i < length && -y+w >= 0 && i >= 0){
-								map[-y+w,i]=true;
-							}
-						}
-
-					y++;
-					if (radiusError<0){
-						radiusError += 2 * y + 1;
-					} else {
-						if (x >= y) {
-							startX = -y + 1 + q;
-							endX = y - 1 + q;
-						}
-						for(int i=startX;i<endX+1;i++){
-							if(x+w < length && i < length && x+w >= 0 && i >= 0){
-								if (!map [x + w, i]) {
-									map [x + w, i] = true;
-								}
-							}
-						}
-						for (int i = startX; i < endX + 1; i++) {
-							if(-x+w < length && i < length && -x+w >= 0 && i >= 0){
-								if (!map [-x + w, i]){
-									map [-x + w, i] = true;
-								}
-							}
-						}
-					}
-					x--;
-					radiusError += 2 * (y - x + 1);
 				}
 
+
+				/*
+				int radiusError = 1 - x;
+				try{
+					while (x >= y)
+					{
+						int startX = -x + i;
+						int endX = x + i;
+						for(int q=startX;q<endX+1;q++){
+							if ((y + j) < length && q < length) {
+								map[y+j,q]=true;
+							}
+						}
+						if (y != 0)
+							for(int q=startX;q<endX+1;q++){
+								if ((-y + j) < length && q < length) {
+									map [-y + j, q] = true;
+								}
+							}
+
+						y++;
+						//if(false)
+						if (radiusError<0)
+						{
+							radiusError += 2 * y + 1;
+						} 
+						else 
+						{
+							if (x >= y)
+							{
+								startX = -y + 1 + i;
+								endX = y - 1 + j;
+								for(int q=startX;q<endX+1;q++){
+									if ((x + j) < length && q < length) {
+										if(!map[x+j,q])map[x+j,q]=true;
+									}
+
+								}
+								for(int q=startX;q<endX+1;q++){
+									if ((-x + j) < length && q < length) {
+										if(!map[-x+j,q])map[-x+j,q]=true;
+									}
+
+								}
+							}
+							x--;
+							radiusError += 2 * (y - x + 1);
+						}
+
+					}
+				} catch(Exception e){
+
+				}*/
 			}
 		}
+	    
 
-		return map;
+		return newMap;
 
 	}
 }

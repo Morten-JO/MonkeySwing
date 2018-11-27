@@ -10,12 +10,15 @@ public class UIControlScripts : MonoBehaviour {
 	public Canvas mainCanvas;
 	public Canvas controlCanvas;
 	public Canvas levelSelectCanvas;
-
+	public Canvas aboutPage;
 	//levelSelect
 	public Image crossSnowLevel;
+	public Slider randomMapGenerationSlider;
+	public static int randomMapGenerationDifficulty = 1;
 
 	// Use this for initialization
 	void Start () {
+		aboutPage.gameObject.SetActive (false);
 		mainCanvas.gameObject.SetActive (true);
 		controlCanvas.gameObject.SetActive (false);
 		levelSelectCanvas.gameObject.SetActive (false);
@@ -48,6 +51,7 @@ public class UIControlScripts : MonoBehaviour {
 	}
 
 	public void LevelSelect(){
+		aboutPage.gameObject.SetActive (false);
 		mainCanvas.gameObject.SetActive (false);
 		controlCanvas.gameObject.SetActive (false);
 		levelSelectCanvas.gameObject.SetActive (true);
@@ -65,10 +69,13 @@ public class UIControlScripts : MonoBehaviour {
 	}
 
 	public void About(){
-
+		aboutPage.gameObject.SetActive (true);
+		mainCanvas.gameObject.SetActive (false);
+		controlCanvas.gameObject.SetActive (false);
 	}
 
 	public void Controls(){
+		aboutPage.gameObject.SetActive (false);
 		mainCanvas.gameObject.SetActive (false);
 		controlCanvas.gameObject.SetActive (true);
 	}
@@ -78,6 +85,7 @@ public class UIControlScripts : MonoBehaviour {
 	}
 
 	public void returnMainMenu(){
+		aboutPage.gameObject.SetActive (false);
 		mainCanvas.gameObject.SetActive (true);
 		controlCanvas.gameObject.SetActive (false);
 	}
@@ -94,6 +102,7 @@ public class UIControlScripts : MonoBehaviour {
 	}
 
 	public void GoRandomMap(){
+		randomMapGenerationDifficulty = (int)randomMapGenerationSlider.value;
 		SceneManager.LoadScene ("GenerationScene");
 	}
 }

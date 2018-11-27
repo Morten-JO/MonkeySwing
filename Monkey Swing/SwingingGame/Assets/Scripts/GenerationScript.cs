@@ -19,6 +19,8 @@ public class GenerationScript: MonoBehaviour {
 	public GameObject startCube;
 	public GameObject finishGoal;
 	public GameObject playerCanvas;
+	public GameObject banana;
+
 
 	//scoreboard
 	public GameObject videoPlayer;
@@ -57,7 +59,7 @@ public class GenerationScript: MonoBehaviour {
 				}
 			}
 		}
-
+		reformedArray = instance.fillCircular (reformedArray, 7);
 
 		float scaleFloater = 30f;
 		TerrainData td = terrain.terrainData;
@@ -107,6 +109,7 @@ public class GenerationScript: MonoBehaviour {
 			yield return null;
 		}
 		generateSwingingLogs (terrain, path, startingPoint);
+		generateBananas (terrain, path, startingPoint);
 		generateMapObjects (path, startingPoint);
 		pathGenerated = true;
 
@@ -164,54 +167,41 @@ public class GenerationScript: MonoBehaviour {
 		float terrainWidth = 256;
 		float terrainHeight = 256;
 		float scale = terrainWidth / map.GetLength (0);
-		int lastTrueI = -5;
-		int lastTrueJ = -5;
 		for (int i = 0; i < map.GetLength (0); i++) {
 			for (int j = 0; j < map.GetLength (1); j++) {
 				if (startPoint == j && i == 0) { 
 
 				} else {
 					if (map [i, j]) {
-						GameObject log = Instantiate (swingingLog) as GameObject;
-						log.transform.position = new Vector3 (j * scale + size * 0.45f, 30f, i * scale + size * 0.45f);
-						int randomVal = UnityEngine.Random.Range (0, 180);
-						log.transform.Rotate (0f, randomVal, 0f); 
-						/*if (i == lastTrueI) {
-							int tCorners = 0;
-							int sideCorners = 0;
-							int tDir = 0;
-							if (i + 1 < map.GetLength (0)) {
-								if (map [i + 1, j]) {
-									sideCorners++;
+						int indexerValues = i + j;
+						if (indexerValues % UIControlScripts.randomMapGenerationDifficulty == 0) {
+							GameObject log = Instantiate (swingingLog) as GameObject;
+							log.transform.position = new Vector3 (j * scale + size * 0.45f, 30f, i * scale + size * 0.45f);
+							int randomVal = UnityEngine.Random.Range (0, 180);
+							log.transform.Rotate (90f, 0f, randomVal); 
+						}
+					}
+				}
+			}
+		}
+	}
 
-								}
-							} 
-							if (i - 1 >= 0) {
-								if (map [i - 1, j]) {
-									sideCorners++;
-								}
-							}
-							if (j + 1 < map.GetLength (0)) {
-								if (map [i, j + 1]) {
-									tCorners++;
-									tDir = 1;
-								}
-							} 
-							if (j - 1 >= 0) {
-								if (map [i, j - 1]) {
-									tCorners++;
-									tDir = -1;
-								}
-							}
-							if (tCorners > 0 && sideCorners > 0) {
-								log.transform.Rotate (new Vector3 (0f, 45f * tDir, 0f));
-							} else {
-								log.transform.Rotate (new Vector3 (0f, 90f, 0f));
-							}*/
+	private void generateBananas(Terrain terrain, bool[,] map, int startPoint){
+		float terrainWidth = 256;
+		float terrainHeight = 256;
+		float scale = terrainWidth / map.GetLength (0);
+		for (int i = 0; i < map.GetLength (0); i++) {
+			for (int j = 0; j < map.GetLength (0); j++) {
+				if (startPoint == j && i == 0) {
 
-
-						lastTrueI = i;
-						lastTrueJ = j;
+				} else {
+					if (map [i, j]) {
+						int indexerValues = i + j;
+						if (indexerValues % UIControlScripts.randomMapGenerationDifficulty == 0) {
+							GameObject bananaObj = Instantiate (banana) as GameObject;
+							int randomVal = UnityEngine.Random.Range (0, 11);
+							bananaObj.transform.position = new Vector3 (j * scale+16f, 15f, i * scale+randomVal);
+						}
 					}
 				}
 			}

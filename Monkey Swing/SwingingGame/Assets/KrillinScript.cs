@@ -65,7 +65,7 @@ public class KrillinScript : MonoBehaviour {
 
 	private IEnumerator chargeDisc(){
 		Vector3 origScale = currentDisc.transform.localScale;
-		Vector3 destScale = new Vector3 (3.0f, 0.01f, 3.0f);
+		Vector3 destScale = new Vector3 (10.0f, 0.01f, 10.0f);
 
 		float currentTime = 0.0f;
 
