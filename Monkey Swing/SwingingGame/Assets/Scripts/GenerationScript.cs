@@ -79,8 +79,6 @@ public class GenerationScript: MonoBehaviour {
 							float y_num = (float)y / (float)height * scaleFloater;
 							heights [x, y] = Mathf.PerlinNoise (x_num, y_num);
 						}
-						float procentNumber = (((float)numberParsed) / ((float)totalNumberToParse)) * 100f;
-						procentText.text = procentNumber.ToString ("n2") + "%";
 					}
 					for (int l = 0; l < 2; l++) { // 2
 
@@ -102,6 +100,8 @@ public class GenerationScript: MonoBehaviour {
 
 				}
 			}
+			float procentNumber = (((float)numberParsed) / ((float)totalNumberToParse)) * 100f;
+			procentText.text = procentNumber.ToString ("n2") + "%";
 			td.SetAlphamaps (0, 0, terrainMapData);
 			td.SetHeights (0, 0, heights);
 			terrain.terrainData = td;
