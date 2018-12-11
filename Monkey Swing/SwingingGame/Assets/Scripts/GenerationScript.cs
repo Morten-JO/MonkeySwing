@@ -69,7 +69,6 @@ public class GenerationScript: MonoBehaviour {
 		int numberParsed = 0;
 		int totalNumberToParse = width * height;
 		float[, ,] terrainMapData = new float[td.alphamapWidth, td.alphamapHeight, td.alphamapLayers];
-		UnityEngine.Debug.Log ("Width: " + td.alphamapWidth);
 		for (int x = 0; x < reformedArray.GetLength(0); x++) { 
 			for (int p = 0; p < 2; p++) {
 				for (int y = 0; y < reformedArray.GetLength(1); y++) {
