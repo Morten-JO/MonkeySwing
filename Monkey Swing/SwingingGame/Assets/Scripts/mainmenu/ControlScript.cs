@@ -152,4 +152,9 @@ public class ControlScript : MonoBehaviour {
 		PlayerPrefs.Save ();
 		controller.returnMainMenu ();
 	}
+
+	public void returnToMainMenuFromAbout(){
+		controller.returnMainMenu ();
+	}
+		
 }

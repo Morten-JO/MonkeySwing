@@ -35,7 +35,6 @@ public class FinishGoal : MonoBehaviour {
 			scoreBoardCamera.enabled = true;
 			scoreBoardCamera.gameObject.SetActive (true);
 			collision.gameObject.GetComponentInChildren<Camera> ().enabled = false;
-			videoPlayer.GetComponent<VideoPlayer> ().enabled = false;
 			float secondsUsed = Time.time - startTime;
 			int ropesUsed = player.GetComponent<PlayerScore> ().getRopesUsed ();
 			scoreBoard.GetComponent<ScoreboardScript> ().updateScoreBoard (secondsUsed, ropesUsed);

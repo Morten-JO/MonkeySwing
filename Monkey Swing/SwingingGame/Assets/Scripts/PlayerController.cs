@@ -36,27 +36,12 @@ public class PlayerController : MonoBehaviour {
 		if (Input.GetKey (KeyCode.RightArrow) || Input.GetKey (KeyCode.D)) {
 			transform.Translate (Vector3.right * moveSpeed * Time.deltaTime);
 		}
-		if (Input.GetKey (KeyCode.Space)) {
-			this.GetComponent<Rigidbody>().AddForce (new Vector3 (0, 300, 0), ForceMode.Impulse);
-		}
-		if (Input.GetKey (KeyCode.E)) {
-			toHinge.GetComponent<HingeJoint> ().connectedBody = hingeCube.GetComponent<Rigidbody>();
-		}
-		if (Input.GetKey (KeyCode.Q)) {
-			toHinge.GetComponent<HingeJoint> ().connectedBody = hingeCube2.GetComponent<Rigidbody>();
-		}
-
 		float newMousePosition = Input.GetAxis ("Mouse X");
 		if (newMousePosition != oldMousePosition) {
 			Vector3 mov = new Vector3 (0f, newMousePosition, 0f);
 			oldMousePosition = newMousePosition;
 			transform.Rotate ( mov);
 		}
-		/*float newMouseYPosition = Input.GetAxis ("Mouse Y");
-		if (newMouseYPosition != oldMouseYPosition) {
-			pitch -= 2.0f * newMouseYPosition;
-			camera.transform.eulerAngles = new Vector3 (pitch, 0f, 0f);
-		}*/
 
 		float newYMousePosition = Input.GetAxis ("Mouse Y");
 		camera.gameObject.transform.Rotate (-Vector3.right * newYMousePosition);
@@ -65,18 +50,5 @@ public class PlayerController : MonoBehaviour {
 		} else if (camera.transform.localEulerAngles.x < 360f - cameraRange  && camera.transform.localEulerAngles.x > 200f) {
 			camera.transform.localEulerAngles = new Vector3 (-cameraRange, 0, 0);
 		}
-		/*if (camera.gameObject.transform.rotation.x > cameraMaxX) {
-			Quaternion old = camera.gameObject.transform.rotation;
-			camera.gameObject.transform.rotation = new Quaternion (cameraMaxX, 0f, 0f, 0f);
-		}
-		if (camera.gameObject.transform.rotation.x < cameraMinX) {
-			Quaternion old = camera.gameObject.transform.rotation;
-			camera.gameObject.transform.rotation = new Quaternion (cameraMinX, 0f, 0f, 0f);
-		}*/
-
-
-
-
-
 	}
 }
